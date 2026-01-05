@@ -9,8 +9,7 @@ const client = new Client({
   ]
 });
 
-const TOKEN = 'const TOKEN = const TOKEN = process.env.TOKEN;
-
+const TOKEN = process.env.TOKEN;
 const TRIGGER_CALL_ID = '1457747684780937381';
 
 // ⏱️ cooldown para evitar múltiplos triggers
@@ -64,31 +63,26 @@ client.on('messageCreate', async (message) => {
 });
 
 // =======================
-// AO ENTRAR NA CALL TRIGGER (CORRIGIDO)
+// AO ENTRAR NA CALL TRIGGER
 // =======================
 client.on('voiceStateUpdate', async (oldState, newState) => {
-  // entrou em uma call
   if (!oldState.channel && newState.channel) {
-
     if (newState.channel.id !== TRIGGER_CALL_ID) return;
     if (newState.member.user.bot) return;
 
     const memberId = newState.member.id;
-
-    // evita múltiplos disparos
     if (cooldown.has(memberId)) return;
 
     cooldown.add(memberId);
 
-    // pequeno delay para o Discord estabilizar
     setTimeout(async () => {
       await moveToRandomCall(newState.member);
-
-      // remove do cooldown depois
       setTimeout(() => cooldown.delete(memberId), 2000);
     }, 500);
   }
 });
 
 client.login(TOKEN);
+
+
 
