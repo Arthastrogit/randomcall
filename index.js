@@ -83,6 +83,19 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
 });
 
 client.login(TOKEN);
+// servidor web mínimo para manter o bot acordado
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Bot está online ✅');
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor web rodando na porta ${PORT}`);
+});
+
 
 
 
